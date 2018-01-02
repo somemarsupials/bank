@@ -12,7 +12,7 @@ describe('Bank', function() {
 
   beforeEach(function() {
     event = sinon.spy();
-    eventConstructor = sinon.spy();
+    eventConstructor = sinon.stub();
     bank = new Bank(eventConstructor);
   });
 
@@ -35,12 +35,53 @@ describe('Bank', function() {
   });
 
   describe('#deposit', function() {
-    beforeEach(function() {
+    describe('when depositing an amount', function() {
+      beforeEach(function() {
+        sinon.spy(bank, '_newEvent');
+        bank.deposit(100)
+      });
 
+      it('calls _newEvent', function() {
+        expect(bank._newEvent.calledWith(100, true)).to.be.true;
+      });
+
+      it('adds 100 to total', function() {
+        expect(bank.total).to.equal(100);
+      });
+    });
+  });
+
+  describe('#_newEvent', function() {
+    beforeEach(function() {
+      eventConstructor.returns(event);
     });
 
-    describe('creates new Event with deposited amount', function() {
+    describe('when creating new deposit event', function() {
+      beforeEach(function() {
+        bank._newEvent(100, true);
+      });
 
+      it('creates event object with value and deposit', function() {
+        expect(eventConstructor.calledWith(100)).to.be.true;
+      });
+
+      it('collects new event in event log', function() {
+        expect(bank.events).to.contain(event)
+      });
+    });
+
+    describe('when creating new withdrawal event', function() {
+      beforeEach(function() {
+        bank._newEvent(100, false);
+      });
+
+      it('creates event object with value and deposit', function() {
+        expect(eventConstructor.calledWith(-100)).to.be.true;
+      });
+
+      it('collects new event in event log', function() {
+        expect(bank.events).to.contain(event)
+      });
     });
   });
 });
