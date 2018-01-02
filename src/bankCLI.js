@@ -3,8 +3,8 @@
 var bank = require('./bank.js');
 
 
-function BankCLI(bank = new bank.Bank()) {
-  this.bank = bank;
+function BankCLI(bankConstructor = bank.createBank) {
+  this.bank = bankConstructor();
 };
 
 BankCLI.prototype.command = function(command) {

@@ -36,4 +36,9 @@ Bank.prototype._newEvent = function(amount, total, date = new Date()) {
   this.events.push(this._eventConstructor(amount, total, date));
 };
 
+function createBank() {
+  return new Bank;
+};
+
 module.exports.Bank = Bank;
+module.exports.createBank = createBank;

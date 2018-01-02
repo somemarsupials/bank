@@ -1,6 +1,6 @@
 'use strict';
 
-var Bank = require('../src/bank.js').Bank;
+var bankModule = require('../src/bank.js');
 var sinon = require('sinon');
 var expect = require('chai').expect;
 
@@ -13,7 +13,7 @@ describe('Bank', function() {
   beforeEach(function() {
     event = sinon.spy();
     eventConstructor = sinon.stub();
-    bank = new Bank(eventConstructor);
+    bank = new bankModule.Bank(eventConstructor);
   });
 
   describe('#new', function() {
@@ -175,5 +175,11 @@ describe('Bank', function() {
         expect(body).to.have.lengthOf(5);
       });
     });
+  });
+});
+
+describe('createBank', function() {
+  it('returns new Bank object', function() {
+    expect(bankModule.createBank().constructor).to.equal(bankModule.Bank);
   });
 });

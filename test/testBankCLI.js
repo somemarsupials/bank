@@ -7,11 +7,13 @@ var sinon = require('sinon');
 
 describe('BankCLI', function() {
   var cli;
+  var bankConstructor;
   var bank;
 
   beforeEach(function() {
-    bank = sinon.stub();
-    cli = new BankCLI(bank);
+    bank = sinon.spy();
+    bankConstructor = function() { return bank; };
+    cli = new BankCLI(bankConstructor);
   });
 
   describe('#new', function() {
@@ -51,8 +53,7 @@ describe('BankCLI', function() {
   });
 
   describe('#withdraw', function() {
-    beforeEach(function() {
-      cli.bank.withdraw = sinon.spy();
+    beforeEach(function() { cli.bank.withdraw = sinon.spy();
       sinon.stub(cli, 'print');
       cli.withdraw(500);
     });
