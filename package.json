@@ -1,0 +1,18 @@
+{
+  "name": "bank",
+  "version": "1.0.0",
+  "repo": "git@github.com:somemarsupials/bank.git",
+  "description": "A simple bank CLI program",
+  "main": "index.js",
+  "scripts": {
+    "start": "src/main.js",
+    "test": "mocha test"
+  },
+  "author": "Theo Breuer-Weil",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "sinon": "^4.1.3"
+  }
+}
