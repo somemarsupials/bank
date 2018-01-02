@@ -37,7 +37,7 @@ describe('Bank', function() {
   describe('#deposit', function() {
     describe('when depositing an amount', function() {
       beforeEach(function() {
-        sinon.spy(bank, '_newEvent');
+        sinon.stub(bank, '_newEvent').returns(100);
         bank.deposit(100)
       });
 
@@ -47,6 +47,23 @@ describe('Bank', function() {
 
       it('adds 100 to total', function() {
         expect(bank.total).to.equal(100);
+      });
+    });
+  });
+
+  describe('#withdraw', function() {
+    describe('when withdrawing an amount', function() {
+      beforeEach(function() {
+        sinon.stub(bank, '_newEvent').returns(-100);
+        bank.withdraw(100)
+      });
+
+      it('calls _newEvent', function() {
+        expect(bank._newEvent.calledWith(100, false)).to.be.true;
+      });
+
+      it('adds 100 to total', function() {
+        expect(bank.total).to.equal(-100);
       });
     });
   });
