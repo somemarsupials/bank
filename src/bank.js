@@ -9,11 +9,13 @@ function Bank(eventConstructor = event.eventFactory) {
 };
 
 Bank.prototype.deposit = function(amount) {
-  this.total += this._newEvent(amount, true);
+  var amount = this._newTotal(amount, true);
+  this._newEvent(amount, this.total);
 };
 
 Bank.prototype.withdraw = function(amount) {
-  this.total += this._newEvent(amount, false);
+  var amount = this._newTotal(amount, false);
+  this._newEvent(amount, this.total);
 };
 
 Bank.prototype.statement = function() {
@@ -24,10 +26,14 @@ Bank.prototype.statement = function() {
   return lines.join('\n');
 };
 
-Bank.prototype._newEvent = function(amount, deposit) {
-  amount *= deposit ? 1 : -1;
-  this.events.push(this._eventConstructor(amount));
+Bank.prototype._newTotal = function(amount, deposit) {
+  amount *= (deposit ? 1 : -1);
+  this.total += amount;
   return amount;
+};
+
+Bank.prototype._newEvent = function(amount, total) {
+  this.events.push(this._eventConstructor(amount, total));
 };
 
 module.exports.Bank = Bank;

@@ -37,33 +37,91 @@ describe('Bank', function() {
   describe('#deposit', function() {
     describe('when depositing an amount', function() {
       beforeEach(function() {
-        sinon.stub(bank, '_newEvent').returns(100);
-        bank.deposit(100)
+        sinon.stub(bank, '_newTotal').returns(100);
+        sinon.stub(bank, '_newEvent');
       });
 
-      it('calls _newEvent', function() {
-        expect(bank._newEvent.calledWith(100, true)).to.be.true;
+      describe('when calculating new total', function() {
+        beforeEach(function() {
+          bank.deposit(100)
+        });
+
+        it('calls _newTotal', function() {
+          expect(bank._newTotal.calledWith(100, true)).to.be.true;
+        });
       });
 
-      it('adds 100 to total', function() {
-        expect(bank.total).to.equal(100);
+      describe('when creating new event', function() {
+        beforeEach(function() {
+          bank.total = 400;
+          bank.deposit(100)
+        });
+
+        it('calls _newEvent', function() {
+          expect(bank._newEvent.calledWith(100, 400)).to.be.true;
+        });
       });
     });
   });
 
   describe('#withdraw', function() {
-    describe('when withdrawing an amount', function() {
+    describe('when depositing an amount', function() {
       beforeEach(function() {
-        sinon.stub(bank, '_newEvent').returns(-100);
-        bank.withdraw(100)
+        sinon.stub(bank, '_newTotal').returns(-100);
+        sinon.stub(bank, '_newEvent');
       });
 
-      it('calls _newEvent', function() {
-        expect(bank._newEvent.calledWith(100, false)).to.be.true;
+      describe('when calculating new total', function() {
+        beforeEach(function() {
+          bank.withdraw(100)
+        });
+
+        it('calls _newTotal', function() {
+          expect(bank._newTotal.calledWith(100, false)).to.be.true;
+        });
       });
 
-      it('adds 100 to total', function() {
+      describe('when creating new event', function() {
+        beforeEach(function() {
+          bank.total = 400;
+          bank.withdraw(100)
+        });
+
+        it('calls _newEvent', function() {
+          expect(bank._newEvent.calledWith(-100, 400)).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('#_newTotal', function() {
+    var newTotal;
+    
+    describe('when depositing', function() {
+      beforeEach(function() {
+        newTotal = bank._newTotal(100, true);
+      });
+
+      it('adds amount to total', function() {
+        expect(bank.total).to.equal(100);
+      });
+
+      it('returns new total', function() {
+        expect(newTotal).to.equal(100);
+      });
+    });
+
+    describe('when withdrawing', function() {
+      beforeEach(function() {
+        newTotal = bank._newTotal(100, false);
+      });
+
+      it('adds amount to total', function() {
         expect(bank.total).to.equal(-100);
+      });
+
+      it('returns new total', function() {
+        expect(newTotal).to.equal(-100);
       });
     });
   });
@@ -73,32 +131,16 @@ describe('Bank', function() {
       eventConstructor.returns(event);
     });
 
-    describe('when creating new deposit event', function() {
-      beforeEach(function() {
-        bank._newEvent(100, true);
-      });
-
-      it('creates event object with value and deposit', function() {
-        expect(eventConstructor.calledWith(100)).to.be.true;
-      });
-
-      it('collects new event in event log', function() {
-        expect(bank.events).to.contain(event)
-      });
+    beforeEach(function() {
+      bank._newEvent(100, 200);
     });
 
-    describe('when creating new withdrawal event', function() {
-      beforeEach(function() {
-        bank._newEvent(100, false);
-      });
+    it('creates event object with value and deposit', function() {
+      expect(eventConstructor.calledWith(100, 200)).to.be.true;
+    });
 
-      it('creates event object with value and deposit', function() {
-        expect(eventConstructor.calledWith(-100)).to.be.true;
-      });
-
-      it('collects new event in event log', function() {
-        expect(bank.events).to.contain(event)
-      });
+    it('collects new event in event log', function() {
+      expect(bank.events).to.contain(event)
     });
   });
 
