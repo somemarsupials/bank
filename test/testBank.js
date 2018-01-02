@@ -132,11 +132,12 @@ describe('Bank', function() {
     });
 
     beforeEach(function() {
-      bank._newEvent(100, 200);
+      // use number in place of date for easier testing
+      bank._newEvent(100, 200, 500);
     });
 
     it('creates event object with value and deposit', function() {
-      expect(eventConstructor.calledWith(100, 200)).to.be.true;
+      expect(eventConstructor.calledWith(100, 200, 500)).to.be.true;
     });
 
     it('collects new event in event log', function() {

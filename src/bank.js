@@ -32,8 +32,8 @@ Bank.prototype._newTotal = function(amount, deposit) {
   return amount;
 };
 
-Bank.prototype._newEvent = function(amount, total) {
-  this.events.push(this._eventConstructor(amount, total));
+Bank.prototype._newEvent = function(amount, total, date = new Date()) {
+  this.events.push(this._eventConstructor(amount, total, date));
 };
 
 module.exports.Bank = Bank;
