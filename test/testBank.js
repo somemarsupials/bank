@@ -19,5 +19,12 @@ describe('Bank', function() {
     it('is created with empty events log', function() {
       expect(bank.events).to.have.lengthOf(0);
     });
+
+    it('has total of 0', function() {
+      expect(bank.total).to.equal(0);
+    });
+  });
+
+  describe('#deposit', function() {
   });
 });
