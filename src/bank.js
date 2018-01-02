@@ -16,6 +16,14 @@ Bank.prototype.withdraw = function(amount) {
   this.total += this._newEvent(amount, false);
 };
 
+Bank.prototype.statement = function() {
+  var lines = ['date || credit || debit || balance'];
+  for (var counter = 0; counter < this.events.length; counter++) {
+    lines.push(this.events[counter].toString());
+  };
+  return lines.join('\n');
+};
+
 Bank.prototype._newEvent = function(amount, deposit) {
   amount *= deposit ? 1 : -1;
   this.events.push(this._eventConstructor(amount));

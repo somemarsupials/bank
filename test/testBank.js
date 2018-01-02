@@ -101,4 +101,36 @@ describe('Bank', function() {
       });
     });
   });
+
+  describe('#statement', function() {
+    beforeEach(function() {
+      sinon.stub(event, 'toString').returns('string');
+      for (var counter = 0; counter < 5; counter++) {
+        bank.events.push(event);
+      };
+    });
+
+    describe('when printing statements', function() {
+      var head;
+      var body;
+
+      beforeEach(function() {
+        var statement = bank.statement();
+        body = statement.split('\n');
+        head = body.shift();
+      });
+
+      it('creates header row', function() {
+        expect(head).to.equal('date || credit || debit || balance');
+      });
+
+      it('converts each event to string', function() {
+        expect(body[0]).to.equal('string');
+      });
+
+      it('has correct number of rows', function() {
+        expect(body).to.have.lengthOf(5);
+      });
+    });
+  });
 });
